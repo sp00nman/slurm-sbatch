@@ -12,8 +12,8 @@ def slurm_cmd(exec_dir, sample_dir, each_sample, output_dir):
         
     cmd = "perl ~/src/SOAPfuse-v1.26/SOAPfuse-RUN.pl " + " \\\n" \
           + "-c " + exec_dir + "/config_" + each_sample + ".txt" + " \\\n" \
-          + "-fd " +  sample_dir + " \\\n" \
-          + "-l " + exec_dir + "/sample_"  + each_sample + ".txt" + " \\\n" \
+          + "-fd " + sample_dir + " \\\n" \
+          + "-l " + exec_dir + "/sample_" + each_sample + ".txt" + " \\\n" \
           + "-o " + output_dir + "/" + each_sample
     
     return cmd
@@ -22,17 +22,17 @@ def slurm_cmd(exec_dir, sample_dir, each_sample, output_dir):
 if __name__ == "__main__":
                                              
     # command line arguments
-    sample_file = sys.argv[1]
-    cpus_per_task = sys.argv[2]
-    mem = sys.argv[3]
-    time = sys.argv[4]
-    queue = sys.argv[5]
-    account = sys.argv[6]
-    output_dir = sys.argv[7]
-    prefix = sys.argv[8]
-    sample_dir = sys.argv[9]
-    ntasks = sys.argv[10]
-    exec_dir = sys.argv[11]
+    sample_file     = sys.argv[1]
+    cpus_per_task   = sys.argv[2]
+    mem             = sys.argv[3]
+    time            = sys.argv[4]
+    queue           = sys.argv[5]
+    account         = sys.argv[6]
+    output_dir      = sys.argv[7]
+    prefix          = sys.argv[8]
+    sample_dir      = sys.argv[9]
+    ntasks          = sys.argv[10]
+    exec_dir        = sys.argv[11]
 
     
     # defaults
