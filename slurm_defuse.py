@@ -5,6 +5,7 @@
 
 import argparse
 import os
+import getpass.getuser()
 from slurm.slurm_parse_sample_file import slurm_id_sample_files
 from slurm.slurm_write_sh_files import write_sh_files
 
@@ -73,7 +74,7 @@ if __name__ == '__main__':
     if not args.queue:
         args.queue = "mediumq"
     if not args.account:
-        args.account = os.getusername()
+        args.account = getpass.getuser()
     if not args.output_dir:
         args.output_dir = os.getcwd()
     if not args.sample_dir:
