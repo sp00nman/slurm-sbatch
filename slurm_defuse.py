@@ -22,7 +22,7 @@ def slurm_cmd(exec_dir, sample_dir, each_sample, output_dir, cpus_per_task):
                    + "\n"
 
     cmd = load_modules \
-          + exec_dir + "/defuse.pl \\\n"\
+          + exec_dir + "/scripts/defuse.pl \\\n"\
           + "-c " + output_dir + "/" + each_sample + "_config.txt \\\n"\
           + "-1 " + sample_dir + "/" + each_sample + "_R1.fastq" + " \\\n"\
           + "-2 " + sample_dir + "/" + each_sample + "_R2.fastq" + " \\\n"\
@@ -81,7 +81,7 @@ if __name__ == '__main__':
         args.sample_dir = os.getcwd()
     if not args.exec_dir:
         home_dir = os.getenv("HOME")
-        args.exec_dir = home_dir + "/src/defuse-0.6.2/scripts"
+        args.exec_dir = home_dir + "/src/defuse-0.6.2"
     if not args.prefix:
         args.prefix = "SAMPLE"
     if not args.defuse_ref:
