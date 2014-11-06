@@ -13,19 +13,19 @@ from slurm.slurm_write_config import write_config_file
 
 def slurm_cmd(exec_dir, sample_dir, each_sample, output_dir, cpus_per_task):
 
-    load_modules = "load module boost/1.55(default)\n"\
-                   + "load module samtools/0.1.19\n"\
-                   + "load module blat/35.1\n"\
-                   + "load module bowtie/1.0.1\n"\
-                   + "load module R/3.1.0\n"\
-                   + "load module gsnap/2013.7.20\n" \
+    load_modules = "module load boost/1.55\n"\
+                   + "module load samtools/0.1.19\n"\
+                   + "module load blat/35.1\n"\
+                   + "module load bowtie/1.0.1\n"\
+                   + "module load R/3.1.0\n"\
+                   + "module load gsnap/2013.7.20\n" \
                    + "\n"
 
     cmd = load_modules \
           + exec_dir + "/defuse.pl \\\n"\
           + "-c " + output_dir + "/" + each_sample + "_config.txt \\\n"\
           + "-1 " + sample_dir + "/" + each_sample + "_R1.fastq" + " \\\n"\
-          + "-2 " + sample_dir + "/" + each_sample + "_R2.fastq" + "\\\n"\
+          + "-2 " + sample_dir + "/" + each_sample + "_R2.fastq" + " \\\n"\
           + "-o " + output_dir + "/" + each_sample + "/ \\\n"\
           + "-p " + cpus_per_task
 
@@ -81,7 +81,7 @@ if __name__ == '__main__':
         args.sample_dir = os.getcwd()
     if not args.exec_dir:
         home_dir = os.getenv("HOME")
-        args.exec_dir = home_dir + "/src/defuse-0.6.2"
+        args.exec_dir = home_dir + "/src/defuse-0.6.2/scripts"
     if not args.prefix:
         args.prefix = "SAMPLE"
     if not args.defuse_ref:
