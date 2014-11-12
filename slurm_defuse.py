@@ -16,9 +16,9 @@ def slurm_cmd(exec_dir, sample_dir, each_sample, output_dir, cpus_per_task):
     load_modules = "module load boost/1.55\n"\
                    + "module load samtools/0.1.19\n"\
                    + "module load blat/35.1\n"\
-                   + "module load bowtie/1.0.1\n"\
+                   + "module load bowtie/1.0.0\n"\
                    + "module load R/3.1.0\n"\
-                   + "module load gsnap/2013.7.20\n" \
+                   + "module load gsnap/2014.07.04\n" \
                    + "\n"
 
     cmd = load_modules \
