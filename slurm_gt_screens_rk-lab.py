@@ -29,12 +29,12 @@ if __name__ == '__main__':
     parser.add_argument('--output_dir', required=False, type=str,
                         help="output_dir")
     parser.add_argument('--cpus_per_task', required=False, type=str, default=1,
-                        help='number of cpus per task (default: %(default)s)')
+                        help='number of cpus per task (default: 4 %(default)s)')
     parser.add_argument('--ntasks', required=False, type=str, default=1,
-                        help='number of tasks (default: %(default)s)')
-    parser.add_argument('--mem', required=False, type=str, default=8000,
+                        help='number of tasks (default: 1 %(default)s)')
+    parser.add_argument('--mem', required=False, type=str, default=6000,
                         help='memory usage in MB (default: %(default)s)')
-    parser.add_argument('--time', required=False, type=str, default="2:00:00",
+    parser.add_argument('--time', required=False, type=str, default="10:00:00",
                         help='FORMAT: HH:MM:SS (default: %(default)s)')
     parser.add_argument('--queue', required=False, type=str, default="mediumq",
                         choices=["shortq", "mediumq", "longq"],
@@ -57,8 +57,6 @@ if __name__ == '__main__':
         args.account = getpass.getuser()
     if not args.output_dir:
         args.output_dir = os.getcwd()
-    if not args.sample_dir:
-        args.sample_dir = os.getcwd()
     if not args.prefix:
         args.prefix = "SAMPLE"
 
