@@ -71,8 +71,6 @@ if __name__ == "__main__":
         args.account = getpass.getuser()
     if not args.output_dir:
         args.output_dir = os.getcwd()
-    if not args.sample_dir:
-        args.sample_dir = os.getcwd()
     if not args.prefix:
         args.prefix = "SAMPLE"
     if not args.genome:
