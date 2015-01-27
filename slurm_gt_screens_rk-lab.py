@@ -7,7 +7,6 @@ import getpass
 from slurm.slurm_parse_sample_file import slurm_tab_sample_files
 from slurm.slurm_write_sh_files import write_sh_files
 
-
 def slurm_cmd(sample_dir, sample_name, screen_name, ref_genome):
         
     cmd = "BaF3_screen_workflow.sh " + "\\\n" \
@@ -69,8 +68,8 @@ if __name__ == '__main__':
         job_name = each_sample[0]
         sample_dir = each_sample[3].rsplit("/",1)[0]
         sample_name = each_sample[3].rsplit("/",1)[1]
-        cmd = slurm_cmd(sample_dir, sample_name, 
-            screen_name=each_sample[0], ref_genome=each_sample[2])
+        cmd = slurm_cmd(sample_dir, sample_name,
+                        screen_name=each_sample[0], ref_genome=each_sample[2])
         print job_name
         print cmd
         write_sh_files(job_name, args.ntasks, args.cpus_per_task, args.mem,
