@@ -32,6 +32,7 @@ if __name__ == "__main__":
     # required arguments
     parser = argparse.ArgumentParser(description='slurm_rnaseq_varcall.py')
     parser.add_argument('--debug', required=False, type=int, help='Debug level')
+    parser.add_argument('--stage', required=False, type=int, help='')
     parser.add_argument('--sample_file', required=True, type=str,
                         help='sample file FORMAT:  path/to/sample/file')
     parser.add_argument('--prefix', required=False, type=str,
@@ -57,6 +58,8 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    if not args.stage:
+        args.stage = "all"
     if not args.cpus_per_task:
         args.cpus_per_task = str("1")
     if not args.ntasks:
