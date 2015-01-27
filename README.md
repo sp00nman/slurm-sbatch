@@ -1,7 +1,9 @@
 slurm-sbatch
 ============
-user@cemm:~/src/slurm-batch$./slurm_defuse.py -h
-================================================
+
+### user@cemm:~/src/slurm-batch$./slurm_defuse.py -h
+
+```bash
 usage: slurm_defuse.py [-h] [--debug DEBUG] --sample_file SAMPLE_FILE
                        [--prefix PREFIX] [--sample_dir SAMPLE_DIR]
                        [--exec_dir EXEC_DIR] [--output_dir OUTPUT_DIR]
@@ -33,10 +35,11 @@ optional arguments:
   --queue {shortq,mediumq,longq}
                         cluster queue/partition (default: mediumq)
   --account ACCOUNT     username
+```
 
+### user@cemm:~/src/slurm-batch$./slurm_rnaseq_varcall.py -h
 
-user@cemm:~/src/slurm-batch$./slurm_rnaseq_varcall.py -h
-========================================================
+```bash
 usage: slurm_rnaseq_varcall.py [-h] [--debug DEBUG] --sample_file SAMPLE_FILE
                                [--prefix PREFIX] [--output_dir OUTPUT_DIR]
                                [--cpus_per_task CPUS_PER_TASK]
@@ -44,4 +47,4 @@ usage: slurm_rnaseq_varcall.py [-h] [--debug DEBUG] --sample_file SAMPLE_FILE
                                [--queue {shortq,mediumq,longq}]
                                [--account ACCOUNT] --region_file REGION_FILE
                                [--genome GENOME]
-
+```
