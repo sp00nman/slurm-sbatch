@@ -15,15 +15,14 @@ def slurm_cmd(stage, sample_dir,
               job_name, genome,
               gene, region):
 
-    cmd = "rnaseq_varcall.py " + " \\\n" \
-        + "--stage " + stage + "\\n" \
-        + "--project_name " + prefix + "_" + job_name + "_" + gene + "\\\n" \
+    cmd = exec_dir + "/rnaseq_varcall.py " + " \\\n" \
+        + "--stage " + stage + " \\\n" \
+        + "--project_name " + prefix + "_" + job_name + "_" + gene + " \\\n" \
         + "--input_file " + sample_name + " \\\n" \
         + "--sample_dir " + sample_dir + " \\\n" \
-        + "--exec_dir " + exec_dir + " \\\n" \
         + "--output_dir " + output_dir + " \\\n" \
         + "--ref_genome " + genome + " \\\n" \
-        + "--region " + region + " \\\n"
+        + "--region " + region + " \\\n\n"
     return cmd
 
 
@@ -32,13 +31,14 @@ if __name__ == "__main__":
     # required arguments
     parser = argparse.ArgumentParser(description='slurm_rnaseq_varcall.py')
     parser.add_argument('--debug', required=False, type=int, help='Debug level')
-    parser.add_argument('--stage', required=False, type=int, help='')
+    parser.add_argument('--stage', required=False, type=int, help='stage')
     parser.add_argument('--sample_file', required=True, type=str,
                         help='sample file FORMAT:  path/to/sample/file')
     parser.add_argument('--prefix', required=False, type=str,
                         help="prefix of output file")
     parser.add_argument('--output_dir', required=False, type=str,
                         help="output_dir")
+    parser.add_argument('--exec_dir', required=False, type=str, help='exec_dir')
     parser.add_argument('--cpus_per_task', required=False, type=str, default=1,
                         help='number of cpus per task (default: %(default)s)')
     parser.add_argument('--ntasks', required=False, type=str, default=1,
@@ -94,10 +94,11 @@ if __name__ == "__main__":
     gene_regions = slurm_read_region_file(args.region_file)
 
     for each_sample in samples:
-        cmd = None
+        print "processing sample " + str(each_sample[1])
+        cmd = ""
         #eg CEMM_05
-        job_name = samples[1][1].rsplit("_")[0] + "_" + \
-                   samples[1][1].rsplit("_")[1]
+        job_name = each_sample[1].rsplit("_")[0] + "_" + \
+                   each_sample[1].rsplit("_")[1]
         # eg. /path/to/samplefile --> withough "/"
         sample_dir = each_sample[0]
         # eg. CEMM_05_accepted_hits.bam
@@ -110,7 +111,7 @@ if __name__ == "__main__":
                                  sample_name, args.prefix,
                                  args.exec_dir, args.output_dir,
                                  job_name, args.genome,
-                                 gene, region)
+                                 gene, str(region))
             cmd += gene_cmd
 
         write_sh_files(job_name, str(args.ntasks),
