@@ -100,7 +100,7 @@ if __name__ == "__main__":
         job_name = each_sample[1].rsplit("_")[0] + "_" + \
                    each_sample[1].rsplit("_")[1]
         # create output_dir
-        output_dir = args.outputdir + "/" + job_name
+        output_dir = args.output_dir + "/" + job_name
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
         # eg. /path/to/samplefile --> withough "/"
