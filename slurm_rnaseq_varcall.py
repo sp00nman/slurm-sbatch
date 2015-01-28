@@ -96,9 +96,13 @@ if __name__ == "__main__":
     for each_sample in samples:
         print "processing sample " + str(each_sample[1])
         cmd = ""
-        #eg CEMM_05
+        # eg CEMM_05
         job_name = each_sample[1].rsplit("_")[0] + "_" + \
                    each_sample[1].rsplit("_")[1]
+        # create output_dir
+        output_dir = args.outputdir + "/" + job_name
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
         # eg. /path/to/samplefile --> withough "/"
         sample_dir = each_sample[0]
         # eg. CEMM_05_accepted_hits.bam
@@ -109,7 +113,7 @@ if __name__ == "__main__":
             region = gene_region[1]
             gene_cmd = slurm_cmd(args.stage, sample_dir,
                                  sample_name, args.prefix,
-                                 args.exec_dir, args.output_dir,
+                                 args.exec_dir, output_dir,
                                  job_name, args.genome,
                                  gene, str(region))
             cmd += gene_cmd
@@ -117,5 +121,5 @@ if __name__ == "__main__":
         write_sh_files(job_name, str(args.ntasks),
                        str(args.cpus_per_task), str(args.mem),
                        args.time, args.queue,
-                       args.account, args.output_dir,
+                       args.account, output_dir,
                        args.prefix, cmd)
