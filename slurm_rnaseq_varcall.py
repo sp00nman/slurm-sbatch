@@ -117,9 +117,10 @@ if __name__ == "__main__":
                                  job_name, args.genome,
                                  gene, str(region))
             cmd += gene_cmd
-
+        
+        # slurm log files are not written to subdirectory
         write_sh_files(job_name, str(args.ntasks),
                        str(args.cpus_per_task), str(args.mem),
                        args.time, args.queue,
-                       args.account, output_dir,
+                       args.account, args.output_dir,
                        args.prefix, cmd)
