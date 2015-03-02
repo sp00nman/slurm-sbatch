@@ -10,16 +10,23 @@ from slurm.slurm_parse_sample_file import slurm_id_sample_files
 from slurm.slurm_write_sh_files import write_sh_files
 
 
+def load_modules():
+
+    modules = "module load bowtie/2.2.4\n" \
+              + "module load boost/1.55\n" \
+              + "module load tophat/2.0.13\n" \
+              + "\n"
+
+    return modules
+
+
 def slurm_cmd(sample_dir, each_sample,
               output_dir, cpus_per_task,
               genome_ref):
 
-    load_modules = "module load bowtie/2.2.4\n" \
-                   + "module load boost/1.55\n" \
-                   + "module load tophat/2.0.13\n" \
-                   + "\n"
+    modules = load_modules()
 
-    cmd = load_modules \
+    cmd = modules \
           + "tophat2 \\\n" \
           + "-o " + output_dir + "/" + "tophat_" + each_sample \
           + "-p " + cpus_per_task \
@@ -40,11 +47,28 @@ def slurm_cmd(sample_dir, each_sample,
     return cmd
 
 
+def run_post(cpus_per_task, genome_ref):
+
+    modules = load_modules()
+    cmd_post = modules \
+               + "tophat-fusion-post \\\n" \
+               + "-p" + cpus_per_task \
+               + "--num-fusion-reads 1 " \
+               + "--num-fusion-pairs 2 " \
+               + "--num-fusion-both 5 " \
+               + "--tex-table" \
+               + genome_ref
+
+    return cmd_post
+
+
 if __name__ == '__main__':
     # required arguments
-    parser = argparse.ArgumentParser(description='slurm_defuse.py')
+    parser = argparse.ArgumentParser(description='slurm_tophatfusion.py')
     parser.add_argument('--debug', required=False, type=int, help='Debug level')
-    parser.add_argument('--sample_file', required=True, type=str,
+    parser.add_argument('--post', action="store_true",
+                        help="Run tophat-fusion-post", )
+    parser.add_argument('--sample_file', required=False, type=str,
                         help='sample file FORMAT:  UPD (unique patient ID')
     parser.add_argument('--prefix', required=False, type=str,
                         help="prefix of output file")
@@ -97,22 +121,27 @@ if __name__ == '__main__':
 
     print args
 
-    # read in sample file
-    sample_list = slurm_id_sample_files(args.sample_file)
+    if args.post:
+        cmd = run_post(str(args.cpus_per_task),
+                       args.genome_ref)
 
-    for each_sample in sample_list:
+    else:
+        # read in sample file
+        sample_list = slurm_id_sample_files(args.sample_file)
 
-        print each_sample
+        for each_sample in sample_list:
 
-        # create output_dir
-        output_dir = args.output_dir + "/" + "tophat_" +each_sample
-        if not os.path.exists(output_dir):
+            print each_sample
+
+            # create output_dir
+            output_dir = args.output_dir + "/" + "tophat_" +each_sample
+            if not os.path.exists(output_dir):
             os.makedirs(output_dir)
 
-        cmd = slurm_cmd(args.sample_dir, each_sample,
+            cmd = slurm_cmd(args.sample_dir, each_sample,
                         args.output_dir, str(args.cpus_per_task),
                         args.tophatfusion_ref)
 
-        write_sh_files(each_sample, str(args.ntasks), str(args.cpus_per_task),
-                       str(args.mem), args.time, args.queue, args.account,
-                       args.output_dir, args.prefix, cmd)
+    write_sh_files(each_sample, str(args.ntasks), str(args.cpus_per_task),
+                   str(args.mem), args.time, args.queue, args.account,
+                   args.output_dir, args.prefix, cmd)
