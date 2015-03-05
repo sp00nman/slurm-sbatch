@@ -22,7 +22,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='slurm_gt_screens_tb-lab.py')
     parser.add_argument('--debug', required=False, type=int, help='Debug level')
     parser.add_argument('--sample_file', required=True, type=str,
-                        help='sample file FORMAT:  path/to/sample/file')
+                        help='sample file FORMAT:  SAMPLE_NAME user genome /path/to/sample/file')
     parser.add_argument('--prefix', required=False, type=str,
                         help="prefix of output file")
     parser.add_argument('--output_dir', required=False, type=str,
