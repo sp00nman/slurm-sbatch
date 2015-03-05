@@ -45,8 +45,6 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    if not args.stage:
-        args.stage = "all"
     if not args.cpus_per_task:
         args.cpus_per_task = str("1")
     if not args.ntasks:
