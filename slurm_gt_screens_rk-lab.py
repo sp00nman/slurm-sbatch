@@ -13,11 +13,10 @@ def slurm_cmd(stage, prefix, job_name, output_dir,
               bowtie_version, annotation_exon,
               annotation_intron, control_file,
               refseq_file, cpus_per_task):
-
     cmd = "gt_screen_workflow.py " + "\\\n" \
           + "--debug 0 " + "\\n" \
           + "--stage " + stage + "\\\n" \
-          + "--project_name " + prefix + "_" + job_name + "_" + " \\\n" \
+          + "--project_name " + prefix + "_" + job_name + " \\\n" \
           + "--output_dir " + output_dir + " \\\n" \
           + "--sequences_dir " + sequences_dir + "\\\n" \
           + "--sample_file " + sample_name + "\\\n" \
@@ -28,7 +27,7 @@ def slurm_cmd(stage, prefix, job_name, output_dir,
           + "--annotation_intron " + annotation_intron + "\\\n" \
           + "--control_file " + control_file + "\\\n" \
           + "--refseq_file " + refseq_file + "\\\n" \
-          + "--num_cups " + cpus_per_task
+          + "--num_cups " + cpus_per_task + "\n"
 
     return cmd
 
@@ -38,10 +37,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='slurm_gt_screens_rk-lab.py')
     parser.add_argument('--debug', required=False, type=int, help='Debug level')
     parser.add_argument('--stage', required=False, type=str, default="all",
-                        choices=["all", "alignment", "filter", "sort",
-                                 "duplicates", "index", "insertions",
-                                 "annotate", "count", "fisher", "plot"],
-                        help='choose analysis steps (default: %(default)s)')
+            help='Analysis steps: [all,alignment,filter,sort,duplicates,index,insertions,annotate,count,fisher,plot], defaults: %(default)s')
     parser.add_argument('--sample_file', required=True, type=str,
                         help='sample file FORMAT: AF_H2O2_run1 afauster hg19 /path/to/sample/file ')
     parser.add_argument('--prefix', required=False, type=str,
@@ -67,10 +63,15 @@ if __name__ == '__main__':
                         help='Genome version')
     parser.add_argument('--bowtie2', required=False, type=str,
                         help='Bowtie version')
-    parser.add_argument('--genomes', required=False, type=str,
-                        help='path to genome version')
-
-
+    parser.add_argument('--annotation_exon', dest='annotation_exon', required=False,
+                        help='Exon annotation file.')
+    parser.add_argument('--annotation_intron', dest='annotation_intron', required=False,
+                        help='Intron annotation file')
+    parser.add_argument('--control_file', dest='control_file', required=False,
+                        help='Control file with insertions for fisher-test.')
+    parser.add_argument('--refseq_file', dest='refseq_file', required=False,
+                        help='Refseq file with start & end position of gene.')
+    
     args = parser.parse_args()
 
     if not args.cpus_per_task:
@@ -91,24 +92,30 @@ if __name__ == '__main__':
         args.prefix = "SAMPLE"
     if not args.genomes:
         args.genomes = "hg19.fa"
+    if not args.bowtie2:
+        args.bowtie2 = "bowtie2"
+    if not args.refseq_file:
+        args.refseq_file = "All_genes_data_ct_srt_sed.txt"
+    if not args.control_file:
+        args.control_file="HAP1_insertions.txt"
 
     print args
 
     #run
     samples = slurm_tab_sample_files(args.sample_file)
-
+    print "cpus: " + args.cpus_per_task
     for each_sample in samples:
         job_name = each_sample[0]
         sample_dir = each_sample[3].rsplit("/",1)[0]
         sample_name = each_sample[3].rsplit("/",1)[1]
         cmd = slurm_cmd(args.stage, args.prefix, job_name, args.output_dir,
-                        args.sequences_dir, sample_name,
+                        sample_dir, sample_name,
                         args.genome_version, args.genomes,
                         args.bowtie2, args.annotation_exon,
                         args.annotation_intron, args.control_file,
                         args.refseq_file, args.cpus_per_task)
         print job_name
         print cmd
-        write_sh_files(job_name, args.ntasks, args.cpus_per_task, args.mem,
-                       args.time, args.queue, args.account,
+        write_sh_files(job_name, str(args.ntasks), str(args.cpus_per_task), str(args.mem),
+                       str(args.time), args.queue, args.account,
                        args.output_dir, args.prefix, cmd)
