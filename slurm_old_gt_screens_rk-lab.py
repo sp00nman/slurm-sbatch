@@ -38,13 +38,12 @@ if __name__ == "__main__":
                         choices=["shortq", "mediumq", "longq"],
                         help='cluster queue/partition (default: %(default)s)')
     parser.add_argument('--account', required=False, type=str, help='username')
+    parser.add_argument('--output_dir', required=False, type=str, help='output directory')
     parser.add_argument('--genome', required=False, type=str,
                         help="Reference genome; default hg18")
 
     args = parser.parse_args()
 
-    if not args.stage:
-        args.stage = "all"
     if not args.cpus_per_task:
         args.cpus_per_task = str("1")
     if not args.ntasks:
