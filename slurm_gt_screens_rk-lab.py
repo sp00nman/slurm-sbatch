@@ -9,25 +9,25 @@ from slurm.slurm_write_sh_files import write_sh_files
 
 
 def slurm_cmd(stage, prefix, job_name, output_dir,
-              sequences_dir, sample_name, genome_version, genome,
-              bowtie_version, annotation_exon,
-              annotation_intron, control_file,
-              refseq_file, cpus_per_task):
-    cmd = "gt_screen_workflow.py " + "\\\n" \
-          + "--debug 0 " + "\\n" \
-          + "--stage " + stage + "\\\n" \
-          + "--project_name " + prefix + "_" + job_name + " \\\n" \
+              sequences_dir, sample_name, exec_dir,
+              genome_version, genome,
+              bowtie_version, annotation,
+              control_file, refseq_file, cpus_per_task):
+
+    cmd = exec_dir + "/" + "gt_screen_workflow.py " + " \\\n" \
+          + "--debug 0 " + " \\\n" \
+          + "--stage " + stage + " \\\n" \
+          + "--project_name " + job_name + " \\\n" \
           + "--output_dir " + output_dir + " \\\n" \
-          + "--sequences_dir " + sequences_dir + "\\\n" \
-          + "--sample_file " + sample_name + "\\\n" \
-          + "--genome_version " + genome_version + "\\\n" \
-          + "--genomes " + genome + "\\\n" \
-          + "--bowtie2 " + bowtie_version + "\\\n" \
-          + "--annotation_exon " + annotation_exon + "\\\n" \
-          + "--annotation_intron " + annotation_intron + "\\\n" \
-          + "--control_file " + control_file + "\\\n" \
-          + "--refseq_file " + refseq_file + "\\\n" \
-          + "--num_cups " + cpus_per_task + "\n"
+          + "--sequences_dir " + sequences_dir + " \\\n" \
+          + "--sample_file " + sample_name + " \\\n" \
+          + "--genome_version " + genome_version + " \\\n" \
+          + "--genomes " + genome + " \\\n" \
+          + "--bowtie2 " + bowtie_version + " \\\n" \
+          + "--annotation " + annotation + " \\\n" \
+          + "--control_file " + control_file + " \\\n" \
+          + "--refseq_file " + refseq_file + " \\\n" \
+          + "--num_cpus " + str(cpus_per_task) + "\n"
 
     return cmd
 
@@ -63,10 +63,8 @@ if __name__ == '__main__':
                         help='Genome version')
     parser.add_argument('--bowtie2', required=False, type=str,
                         help='Bowtie version')
-    parser.add_argument('--annotation_exon', dest='annotation_exon', required=False,
-                        help='Exon annotation file.')
-    parser.add_argument('--annotation_intron', dest='annotation_intron', required=False,
-                        help='Intron annotation file')
+    parser.add_argument('--annotation', dest='annotation', required=False,
+                        help='Annotation file.')
     parser.add_argument('--control_file', dest='control_file', required=False,
                         help='Control file with insertions for fisher-test.')
     parser.add_argument('--refseq_file', dest='refseq_file', required=False,
@@ -103,17 +101,16 @@ if __name__ == '__main__':
 
     #run
     samples = slurm_tab_sample_files(args.sample_file)
-    print "cpus: " + args.cpus_per_task
     for each_sample in samples:
         job_name = each_sample[0]
         sample_dir = each_sample[3].rsplit("/",1)[0]
         sample_name = each_sample[3].rsplit("/",1)[1]
         cmd = slurm_cmd(args.stage, args.prefix, job_name, args.output_dir,
-                        sample_dir, sample_name,
+                        sample_dir, sample_name, args.exec_dir,
                         args.genome_version, args.genomes,
-                        args.bowtie2, args.annotation_exon,
-                        args.annotation_intron, args.control_file,
-                        args.refseq_file, args.cpus_per_task)
+                        args.bowtie2, args.annotation,
+                        args.control_file, args.refseq_file,
+                        str(args.cpus_per_task))
         print job_name
         print cmd
         write_sh_files(job_name, str(args.ntasks), str(args.cpus_per_task), str(args.mem),
