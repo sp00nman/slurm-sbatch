@@ -1,7 +1,3 @@
-import sys
-import os
-
-
 def slurm_dir_sample_files(sample_file):
     # /path/to/sample/file
     # /path/to/nextsample/file
@@ -61,17 +57,13 @@ def slurm_paired_sample_files(sample_file):
 
     try:
         file_handle = open(sample_file)
-        sample_pairs = [(file_handle[i-1],file_handle[i])
-                        for i in xrange(1,len(file_handle), 2)]
+        lines = file_handle.readlines()
+        sample_pairs = [(lines[i-1], lines[i])
+                        for i in xrange(1, len(lines), 2)]
+
         file_handle.close()
 
     except IOError:
         print('Sample file is missing.')
 
     return sample_pairs
-
-
-
-
-
-
