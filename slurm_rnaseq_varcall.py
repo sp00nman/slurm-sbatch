@@ -24,7 +24,8 @@ def slurm_cmd(exec_dir,
               dbsnp,
               annovar,
               num_cpus,
-              heap_mem):
+              heap_mem,
+	      flag_variants):
 
     cmd = exec_dir + "/rnaseq_varcall.py " + " \\\n" \
         + "--stage " + stage + " \\\n" \
@@ -40,7 +41,8 @@ def slurm_cmd(exec_dir,
         + "--dbsnp " + dbsnp + " \\\n" \
         + "--annovar " + annovar + " \\\n" \
         + "--num_cpus " + num_cpus + " \\\n" \
-        + "--heap_mem " + heap_mem
+        + "--heap_mem " + heap_mem + "\\\n" \
+	+ "--flag_variants " + flag_variants
 
     return cmd
 
@@ -102,6 +104,9 @@ if __name__ == "__main__":
     # annovar specific options
     parser.add_argument('--annovar', required=False, type=str,
                         help="Annotate variant with annovar.")
+    # variants to flag
+    parser.add_argument('--flag_variants', required=False, type=str,
+                        help="Input file with variants to flag.") 
 
     args = parser.parse_args()
 
@@ -153,7 +158,8 @@ if __name__ == "__main__":
             dbsnp=args.dbsnp,
             annovar=args.annovar,
             num_cpus=str(args.cpus_per_task),
-            heap_mem=args.heap_mem
+            heap_mem=args.heap_mem,
+	    flag_variants = args.flag_variants
         )
 
         write_sh_files(
