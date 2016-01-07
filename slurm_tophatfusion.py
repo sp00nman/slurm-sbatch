@@ -28,8 +28,8 @@ def slurm_cmd(sample_dir, each_sample,
 
     cmd = modules \
           + "tophat2 \\\n" \
-          + "-o " + output_dir + "/" + "tophat_" + each_sample + "\\\n" \
-          + "-p " + cpus_per_task + "\\\n" \
+          + "-o " + output_dir + "/" + "tophat_" + each_sample + " \\\n" \
+          + "-p " + cpus_per_task + " \\\n" \
           + "--fusion-search \\\n" \
           + "--keep-fasta-order \\\n" \
           + "--bowtie1 \\\n" \
@@ -40,8 +40,8 @@ def slurm_cmd(sample_dir, each_sample,
           + "--fusion-min-dist 100000 \\\n" \
           + "--fusion-anchor-length 13 \\\n" \
           + "--fusion-ignore-chromosomes chrM \\\n" \
-          + genome_ref + "\\\n" \
-          + sample_dir + "/" + each_sample + "_R1.fastq" + " \\\n"\
+          + genome_ref + " \\\n" \
+          + sample_dir + "/" + each_sample + "_R1.fastq" + " \\\n" \
           + sample_dir + "/" + each_sample + "_R2.fastq"
 
     return cmd
