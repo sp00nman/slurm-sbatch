@@ -28,8 +28,8 @@ def slurm_cmd(sample_dir, each_sample,
 
     cmd = modules \
           + "tophat2 \\\n" \
-          + "-o " + output_dir + "/" + "tophat_" + each_sample \
-          + "-p " + cpus_per_task \
+          + "-o " + output_dir + "/" + "tophat_" + each_sample + "\\\n" \
+          + "-p " + cpus_per_task + "\\\n" \
           + "--fusion-search \\\n" \
           + "--keep-fasta-order \\\n" \
           + "--bowtie1 \\\n" \
@@ -40,7 +40,7 @@ def slurm_cmd(sample_dir, each_sample,
           + "--fusion-min-dist 100000 \\\n" \
           + "--fusion-anchor-length 13 \\\n" \
           + "--fusion-ignore-chromosomes chrM \\\n" \
-          + genome_ref \
+          + genome_ref + "\\\n" \
           + sample_dir + "/" + each_sample + "_R1.fastq" + " \\\n"\
           + sample_dir + "/" + each_sample + "_R2.fastq"
 
@@ -142,6 +142,7 @@ if __name__ == '__main__':
                         args.output_dir, str(args.cpus_per_task),
                         args.tophatfusion_ref)
 
-    write_sh_files(each_sample, str(args.ntasks), str(args.cpus_per_task),
-                   str(args.mem), args.time, args.queue, args.account,
-                   args.output_dir, args.prefix, cmd)
+            write_sh_files(each_sample, str(args.ntasks),
+                           str(args.cpus_per_task), str(args.mem), args.time,
+                           args.queue, args.account, args.output_dir,
+                           args.prefix, cmd)
